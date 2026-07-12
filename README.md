@@ -38,3 +38,11 @@ mvn clean package
 ```
 
 构建完成后可在 `target/` 目录获取插件 jar。
+
+## SpigotMC 发布资料
+
+- [SpigotMC 资源介绍](docs/SPIGOTMC-RESOURCE.md)
+- [SpigotMC 完整 BBCode 文档](docs/SPIGOTMC-RESOURCE-BBCODE.txt)
+- [SpigotMC 手动发布指南](docs/SPIGOTMC_MANUAL_PUBLISHING.md)
+- [版本变更记录](CHANGELOG.md)
+- [MIT License](LICENSE)

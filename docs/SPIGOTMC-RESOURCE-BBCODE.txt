@@ -1,0 +1,111 @@
+[CENTER][SIZE=7][B]Reload Documentation[/B][/SIZE]
+[SIZE=4]Version 1.0.2[/SIZE][/CENTER]
+
+[COLOR=#ff4d4d][B]Language notice:[/B][/COLOR] The SpigotMC resource page, documentation and support channel are English-only. Chinese-language support is not provided on SpigotMC.
+
+[SIZE=5][B]Requirements[/B][/SIZE]
+[LIST]
+[*]Paper 26.2 only
+[*]Java 25 or newer
+[*]No third-party plugin dependencies
+[*]Spigot and Folia compatibility has not been tested and is not claimed
+[*]The plugin itself currently uses Chinese configuration comments, command feedback and console messages
+[*]The 1.0.2 jar passed a clean Maven build; no additional live-server test was performed for this documentation update
+[/LIST]
+
+[SIZE=5][B]Installation[/B][/SIZE]
+[LIST=1]
+[*]Stop the server.
+[*]Download [B]Reload-1.0.2.jar[/B] from the GitHub Release or SpigotMC resource page.
+[*]Place the jar in the server's [B]plugins[/B] directory.
+[*]Start the Paper 26.2 server with Java 25 or newer.
+[*]Confirm that [B]plugins/Reload/config.yml[/B] was created.
+[*]Stop the server before the first configuration edit, or edit the file carefully and run [B]/ro config[/B] afterward.
+[/LIST]
+
+[SIZE=5][B]Player Commands[/B][/SIZE]
+Reload provides no regular player commands.
+
+[SIZE=5][B]Admin Commands[/B][/SIZE]
+[LIST]
+[*][B]/ro config[/B] - reloads config.yml, cancels the existing scheduled task and starts a new scheduled task
+[/LIST]
+
+[SIZE=5][B]Aliases[/B][/SIZE]
+No command aliases are defined. The registered command name is [B]ro[/B].
+
+[SIZE=5][B]Permissions[/B][/SIZE]
+[LIST]
+[*][B]reload.command[/B] - allows use of /ro config
+[/LIST]
+The plugin descriptor does not declare an explicit default for this permission. Configure access with your server's permission system and grant it only to trusted administrators.
+
+[SIZE=5][B]Main Workflow[/B][/SIZE]
+[LIST=1]
+[*]At startup, Reload creates its data directory and default config.yml when necessary.
+[*]The plugin reads [B]interval[/B] and [B]commands[/B] from config.yml.
+[*]A scheduled task starts immediately.
+[*]Every configured command is dispatched sequentially from the server console.
+[*]The task repeats after the configured number of seconds.
+[*]Running [B]/ro config[/B] reloads the file, cancels the old task and starts a replacement immediately.
+[/LIST]
+
+[SIZE=5][B]Configuration File[/B][/SIZE]
+The configuration is stored at [B]plugins/Reload/config.yml[/B]. The default file is:
+
+[CODE]# Command execution interval in seconds
+interval: 60
+
+# Commands to execute without a leading slash
+commands:
+  - say The server is running normally[/CODE]
+
+The distributed file contains equivalent Chinese comments and a Chinese example message. YAML indentation must use spaces.
+
+[SIZE=5][B]Common Configuration Options[/B][/SIZE]
+[LIST]
+[*][B]interval[/B] - execution interval in seconds. The bundled default is 60. If the key is absent, the code fallback is 300. Values below 1 are clamped to 1 second at runtime.
+[*][B]commands[/B] - YAML list of console commands. Store commands without a leading slash. Commands run in list order.
+[/LIST]
+
+[SIZE=5][B]Command Safety[/B][/SIZE]
+[LIST]
+[*]Every configured command runs with full server-console authority.
+[*]Only trusted administrators should be able to edit config.yml or run the reload command.
+[*]Do not insert untrusted player input, passwords, tokens or other secrets.
+[*]Verify that every command is safe to repeat at the configured interval.
+[*]A reload starts a new task immediately, so the command list also executes immediately after /ro config.
+[/LIST]
+
+[SIZE=5][B]Data Storage and Backup[/B][/SIZE]
+Reload stores no player records, economy data or transaction data. Only [B]plugins/Reload/config.yml[/B] needs to be backed up. Commands executed by Reload may change data belonging to Minecraft or other plugins; use the relevant system's backup procedure for that external data.
+
+[SIZE=5][B]Upgrading[/B][/SIZE]
+[LIST=1]
+[*]Stop the server.
+[*]Back up [B]plugins/Reload/config.yml[/B].
+[*]Remove the previous Reload jar from the plugins directory.
+[*]Copy the new jar into the plugins directory.
+[*]Keep the existing config.yml unless the release notes require a configuration change.
+[*]Start the server and review the Reload enable message and scheduled command output.
+[/LIST]
+
+[SIZE=5][B]Known Limits[/B][/SIZE]
+[LIST]
+[*]Paper 26.2 is the only claimed server target.
+[*]The plugin has no in-game editor, cron expression support, per-command interval, delayed first run or command failure retry.
+[*]All configured commands share one interval and run sequentially on the server scheduler.
+[*]The first execution occurs immediately when the scheduler starts, including after configuration reload.
+[*]Malformed YAML can cause the plugin to fall back to an empty in-memory configuration; always inspect the console after reloading.
+[*]The plugin does not provide transaction rollback for commands that partially succeed or fail.
+[*]Runtime messages and the bundled configuration comments are currently Chinese.
+[/LIST]
+
+[SIZE=5][B]Support[/B][/SIZE]
+[LIST]
+[*][URL=https://github.com/yangzijian52/reload]Source Code[/URL]
+[*][URL=https://github.com/yangzijian52/reload/releases]Downloads[/URL]
+[*][URL=https://github.com/yangzijian52/reload/issues]English Bug Reports and Support[/URL]
+[/LIST]
+
+When reporting a problem, include the Paper build, Java version, Reload version, relevant console output and a redacted config.yml. Do not publish secrets or sensitive command arguments.
